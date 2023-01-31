@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notes/firebase_options.dart';
 import 'package:notes/views/loginview.dart';
 import 'package:notes/views/register.dart';
+import 'package:notes/views/verify.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +33,20 @@ class HomePage extends StatelessWidget {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             return const LoginView();
-          // final user = FirebaseAuth.instance.currentUser;
+            // ignore: dead_code
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null) {
+              if (user.emailVerified) {
+                print('Email is verified');
+              } else {
+                return const verifyEmailView();
+              }
+            } else {
+              return const LoginView();
+            }
+
+            return const Text('Done');
+            
           // // final ef = user?.emailVerified ?? false;
           // // print(ef);
           // if (user?.emailVerified ?? false) {
@@ -58,5 +72,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-
