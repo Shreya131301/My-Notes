@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/views/constants/routes.dart';
+
 
 // ignore: camel_case_types
 class verifyEmailView extends StatefulWidget {
@@ -19,13 +21,26 @@ class _verifyEmailViewState extends State<verifyEmailView> {
       ),
       body: Column(
         children: [
-          const Text('Please verify your email address'),
+          const Text(
+              'Click on the link sent on your mail to verify your email'),
+          // const Text("If you have'nt received it, click below"),
           TextButton(
-              onPressed: () async {
-                final user = FirebaseAuth.instance.currentUser;
-                await user?.sendEmailVerification();
-              },
-              child: const Text('Send email verification'))
+            onPressed: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              await user?.sendEmailVerification();
+            },
+            child: const Text('Click here to resend it'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
+            },
+            child: const Text('Restart'),
+          )
         ],
       ),
     );
