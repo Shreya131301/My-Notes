@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notes/firebase_options.dart';
+import 'package:notes/views/constants/routes.dart';
 import 'package:notes/views/loginview.dart';
 import 'package:notes/views/register.dart';
 import 'package:notes/views/verify.dart';
@@ -16,8 +17,9 @@ void main() {
     ),
     home: const HomePage(),
     routes: {
-      '/login/': (context) => const LoginView(),
-      '/register/': (context) => const RegisterView()
+      loginRoute: (context) => const LoginView(),
+      registerRoute: (context) => const RegisterView(),
+      notesRoute : ((context) => const NotesView())
     },
   ));
 }
@@ -36,25 +38,21 @@ class HomePage extends StatelessWidget {
             // return const LoginView();
             // ignore: dead_code
             final user = FirebaseAuth.instance.currentUser;
-            print(user);
+            devtools.log(user.toString());
             if (user != null) {
               if (user.emailVerified) {
                 return const NotesView();
               } else {
-                // print("Email ain't verified");
                 return const verifyEmailView();
               }
             } else {
-              // print('User is null');
               return const LoginView();
             }
 
-          // return const Text('Done');
-
           // // final ef = user?.emailVerified ?? false;
-          // // print(ef);
+          // // devtools.log(ef);
           // if (user?.emailVerified ?? false) {
-          //   print('You are a verified user');
+          //   devtools.log('You are a verified user');
           // } else {
           //   // Future.delayed(
           //   //   Duration.zero,
@@ -64,7 +62,7 @@ class HomePage extends StatelessWidget {
           //   //     ));
           //   //   },
           //   // );
-          //   // print("VERIFICATION DONE");
+          //   // devtools.log("VERIFICATION DONE");
           //   return const verifyEmailView();
           // }
           // return const Text('Done');
@@ -102,7 +100,7 @@ class _NotesViewState extends State<NotesView> {
                 if (shouldLogout) {
                   await FirebaseAuth.instance.signOut();
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/login/', (_) => false);
+                      .pushNamedAndRemoveUntil(loginRoute, (_) => false);
                 }
                 break;
             }
