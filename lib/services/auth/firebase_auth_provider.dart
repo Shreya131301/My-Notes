@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:notes/services/auth/auth_user.dart';
 import 'package:notes/services/auth/auth_provider.dart';
 import 'package:notes/services/auth/auth_exceptions.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../firebase_options.dart';
 
 class FirebaseAuthProvider extends AuthProvider {
   @override
@@ -93,5 +96,10 @@ class FirebaseAuthProvider extends AuthProvider {
     } catch (e) {
       throw GenericAuthException();
     }
+  }
+
+  @override
+  Future<void> initialize() async{
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   }
 }

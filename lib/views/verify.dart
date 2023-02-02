@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/services/auth/auth_service.dart';
 import 'package:notes/views/constants/routes.dart';
-
 
 // ignore: camel_case_types
 class verifyEmailView extends StatefulWidget {
@@ -26,14 +25,13 @@ class _verifyEmailViewState extends State<verifyEmailView> {
           // const Text("If you have'nt received it, click below"),
           TextButton(
             onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              await user?.sendEmailVerification();
+              AuthService.firebase().sendEmailVerification();
             },
             child: const Text('Click here to resend it'),
           ),
           TextButton(
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
+              await AuthService.firebase().logOut();
               Navigator.of(context).pushNamedAndRemoveUntil(
                 loginRoute,
                 (route) => false,
